@@ -7,7 +7,8 @@ class RicardoMartins_OutofstockLast_Model_CatalogSearch_Advanced extends Mage_Ca
      * @return Mage_CatalogSearch_Model_Mysql4_Advanced_Collection
      */
     public function getProductCollection(){
-        if (is_null($this->_productCollection)) {
+        
+		if (is_null($this->_productCollection)) {
             $this->_productCollection = Mage::getResourceModel('catalogsearch/advanced_collection')
                 ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
                 ->addMinimalPrice()
@@ -26,7 +27,13 @@ class RicardoMartins_OutofstockLast_Model_CatalogSearch_Advanced extends Mage_Ca
 
             Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($this->_productCollection);
             Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($this->_productCollection);
-        }
+
+			$this->_productCollection->setOrder('on_top', 'DESC');
+
+			$this->_productCollection->getSelect()->group(array('entity_id'));
+		
+		}
+
         return $this->_productCollection;
     }
 }
